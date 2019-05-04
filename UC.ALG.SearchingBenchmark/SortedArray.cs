@@ -4,68 +4,68 @@ using System.Linq;
 
 namespace UC.ALG.SearchingBenchmark
 {
-    public class SortedArray
+    public class SortedArray : IBenchableStructure
     {
-        public List<int> inner { get; }
+        public List<int> Inner { get; }
         // Creates a new, empty instance.
         public SortedArray()
         {
-            inner = new List<int>();
+            Inner = new List<int>();
         }
 
         // Searches for +value+ in +self+.
         // Returns index of +value+ in the array or -1 if +value+ is not found.
-        public int find(int value)
+        public int Find(int value)
         {
-            return binary_search(value);
+            return BinarySearch(value);
         }
 
         // Searches for +value+ using binary search.
         // Returns index of +value+ in the array or -1 if +value+ is not found.
-        public int binary_search(int value)
+        public int BinarySearch(int value)
         {
-            var search_result = binary_search_internal(value);
-            return search_result.Item1 ? search_result.Item2 : -1;
+            var searchResult = BinarySearchInternal(value);
+            return searchResult.Item1 ? searchResult.Item2 : -1;
         }
 
         // Searches for +value+ using interpolation search.
         // Returns index of +value+ in the array or -1 if +value+ is not found.
-        public int interpolation_search(int value)
+        public int InterpolationSearch(int value)
         {
-            var search_result = interpolation_search_internal(value);
-            return search_result.Item1 ? search_result.Item2 : -1;
+            var searchResult = InterpolationSearchInternal(value);
+            return searchResult.Item1 ? searchResult.Item2 : -1;
         }
 
         // Inserts +value+ into +self+. If +value+ is already there, this method does nothing.
         // Returns index of +value+.
-        public int insert(int value)
+        public int Insert(int value)
         {
-            var search_result = binary_search_internal(value);
-            if (!search_result.Item1)
+            var searchResult = BinarySearchInternal(value);
+            if (!searchResult.Item1)
             {
-                inner.Insert(search_result.Item2,value);
+                Inner.Insert(searchResult.Item2,value);
             }
 
-            return search_result.Item2;
+            return searchResult.Item2;
         }
 
         // Deletes +value+ from +self+. If +self+ doesn't contain +value+, this method does nothing.
         // Returns +true+ if +value+ was deleted, returns false if +value+ was not found.
-        public bool delete(int value)
+        public bool Delete(int value)
         {
-            var index = binary_search(value);
+            var index = BinarySearch(value);
             if (index == -1)
             {
                 return false;
             }
-            inner.RemoveAt(index);
+            Inner.RemoveAt(index);
             return true;
         }
 
         // Converts self into a regular +Array+.
         public int[] to_a()
         {
-            return inner.ToArray();
+            return Inner.ToArray();
         }
 
 
@@ -74,32 +74,32 @@ namespace UC.ALG.SearchingBenchmark
         // Returns a two-item array. If +value+ is found, returns +[true, index]+ where +index+ is the index of +value+.
         // Otherwise, returns +[false, index]+ where +index+ is the index to which +value+ could be inserted
         // (keeping the array sorted).
-        private ValueTuple<bool,int> binary_search_internal(int value)
+        private ValueTuple<bool,int> BinarySearchInternal(int value)
         {
-            if (inner.Count== 0)
+            if (Inner.Count== 0)
             {
                 return (false, 0);
             }
 
             var left = 0;
-            var right = inner.Count- 1;
-            if (value < inner[left])
+            var right = Inner.Count- 1;
+            if (value < Inner[left])
             {
                 return (false, 0);
             }
 
-            if (value > inner[right])
+            if (value > Inner[right])
             {
                 return (false, right + 1);
             }
             while (left <= right)
             {
                 var middle = (left + right) / 2;
-                if (inner[middle] == value)
+                if (Inner[middle] == value)
                 {
                     return (true, middle);
                 }
-                else if (value < inner[middle])
+                else if (value < Inner[middle])
                 {
                     right = middle - 1;
                 }
@@ -116,21 +116,21 @@ namespace UC.ALG.SearchingBenchmark
         // Returns a two-item array. If +value+ is found, returns +[true, index]+ where +index+ is the index of +value+.
         // Otherwise, returns +[false, index]+ where +index+ is the index to which +value+ could be inserted
         // (keeping the array sorted).
-        public ValueTuple<bool,int> interpolation_search_internal(int value)
+        private ValueTuple<bool,int> InterpolationSearchInternal(int value)
         {
-            if (inner.Count== 0)
+            if (Inner.Count== 0)
             {
                 return (false, 0);
             }
 
             var left = 0;
-            var right = inner.Count- 1;
-            if (value < inner[left])
+            var right = Inner.Count- 1;
+            if (value < Inner[left])
             {
                 return (false, 0);
             }
 
-            if (value > inner[right])
+            if (value > Inner[right])
             {
                 return (false, right + 1);
             }
@@ -143,7 +143,7 @@ namespace UC.ALG.SearchingBenchmark
                 }
                 else
                 {
-                    candidate = (int)Math.Round(left + (right - left) * (value - inner[left]) / (float)(inner[right] - inner[left]));
+                    candidate = (int)Math.Round(left + (right - left) * (value - Inner[left]) / (float)(Inner[right] - Inner[left]));
                 }
 
                 if (candidate < left)
@@ -156,12 +156,12 @@ namespace UC.ALG.SearchingBenchmark
                     return (false, right + 1);
                 }
 
-                if (inner[candidate] == value)
+                if (Inner[candidate] == value)
                 {
                     return (true, candidate);
                 }
 
-                else if (value < inner[candidate])
+                else if (value < Inner[candidate])
                 {
                     right = candidate - 1;
                 }

@@ -2,7 +2,7 @@
 
 namespace UC.ALG.SearchingBenchmark
 {
-    public class UnsortedArray
+    public class UnsortedArray : IBenchableStructure
     {
         public List<int> Inner { get; }
         // Creates a new, empty instance.

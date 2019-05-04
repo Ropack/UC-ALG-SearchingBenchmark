@@ -11,28 +11,44 @@ namespace UC.ALG.SearchingBenchmark
     {
         private int ArraySize { get; }
         private int Repeat { get; }
-        private List<int[]> RefList { get; set; }
+        private List<int[]> RefListInserting { get; set; }
+        private List<int[]> RefListSearching { get; set; }
+        private List<int[]> RefListDeleting { get; set; }
 
         public Benchmark(int arraySize, int repeat)
         {
             ArraySize = arraySize;
             Repeat = repeat;
         }
-        public Dictionary<BenchmarkStructureType,TimeSpan> Start()
+        public Dictionary<BenchmarkStructureType, Dictionary<BenchmarkOperationType, TimeSpan>> Start()
         {
             SetUp();
             WarmUp();
 
-            RefList = new List<int[]>();
+            RefListInserting = new List<int[]>();
             for (int i = 0; i < Repeat; i++)
             {
-                RefList.Add(FillArray(ArraySize));
+                RefListInserting.Add(FillArray(ArraySize));
+            }
+            RefListSearching = new List<int[]>();
+            for (int i = 0; i < Repeat; i++)
+            {
+                RefListSearching.Add(FillArray(ArraySize));
+            }
+            RefListDeleting = new List<int[]>();
+            for (int i = 0; i < Repeat; i++)
+            {
+                RefListDeleting.Add(FillArray(ArraySize));
             }
 
-            var results = new Dictionary<BenchmarkStructureType, TimeSpan>();
-            foreach (BenchmarkStructureType type in Enum.GetValues(typeof(BenchmarkStructureType)))
+            var results = new Dictionary<BenchmarkStructureType, Dictionary<BenchmarkOperationType, TimeSpan>>();
+            foreach (BenchmarkStructureType structure in Enum.GetValues(typeof(BenchmarkStructureType)))
             {
-                results.Add(type, BenchAlgorithm(type));
+                results.Add(structure, new Dictionary<BenchmarkOperationType, TimeSpan>());
+                foreach (BenchmarkOperationType operation in Enum.GetValues(typeof(BenchmarkOperationType)))
+                {
+                     results[structure].Add(operation, BenchAlgorithm(structure, operation));
+                }
             }
 
             return results;
@@ -45,12 +61,14 @@ namespace UC.ALG.SearchingBenchmark
             Thread.CurrentThread.Priority = ThreadPriority.Highest; //zabrání vláknům s nižší prioritou přerušit toto vlákno
         }
 
-        private TimeSpan BenchAlgorithm(BenchmarkStructureType type)
+        private TimeSpan BenchAlgorithm(BenchmarkStructureType type, BenchmarkOperationType operation)
         {
             Action<int[]> sortFunc;
+            IBenchableStructure structure;
             switch (type)
             {
                 case BenchmarkStructureType.UnsortedArray:
+                    structure = ne
                     break;
                 case BenchmarkStructureType.SortedArray:
                     break;
@@ -71,6 +89,10 @@ namespace UC.ALG.SearchingBenchmark
             return sw.Elapsed;
         }
 
+        private TimeSpan B<T>()
+        {
+            T
+        }
         private List<int[]> CopyArrayList(List<int[]> refList)
         {
             var list = new List<int[]>(refList.Count);

@@ -14,7 +14,7 @@ namespace UC.ALG.SearchingBenchmark
         }
 
         // Searches for +x+. Returns +Vertex+ containing +x+ or +null+ if +x+ is not found.
-        public Vertex Find(int? x)
+        public Vertex Find(int x)
         {
             var node = SearchFor(x);
             return (node.Value != null) ? node : null;
@@ -22,7 +22,7 @@ namespace UC.ALG.SearchingBenchmark
 
         // Inserts +x+ into +self+. If +x+ is already there, this method does nothing.
         // Returns +Vertex+ containing +x+.
-        public Vertex Insert(int? x)
+        public Vertex Insert(int x)
         {
             var node = SearchFor(x);
             if (node.Value == null)
@@ -43,7 +43,7 @@ namespace UC.ALG.SearchingBenchmark
 
         // Deletes +x+ from +self+. If +self+ doesn't contain +x+, this method does nothing.
         // Returns +true+ if +x+ was deleted, returns false if +x+ was not found.
-        public bool Delete(int? x)
+        public bool Delete(int x)
         {
             var node = SearchFor(x);
             if (node.Value != null)
